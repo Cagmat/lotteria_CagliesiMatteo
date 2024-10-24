@@ -1,21 +1,51 @@
-<h1 align="center">Lotteria</h1>
-
-<p align="center" style="font-family: monospace">Monica Ciuchetti <a href="https://github.com/mciuchetti">@mciuchetti</a></p>
-<p align="center" style="font-family: monospace">Corso TPSIT <a href="https://www.avoltapg.edu.it/">ITTS A. Volta (PG)</a></p>
-<p align="center" style="font-family: monospace">Template del file README.md ispirato da <a href="https://github.com/matbagnoletti">@matbagnoletti</a></p>
+# Lotteria Multithread
 
 ## Descrizione
-Applicazione Java per simulare l'estrazione di numeri random da inserire in una matrice e il successivo gioco di indovinare uno dei numeri estratti.
 
-## Obiettivi
-- Diagramma degli stati di un thread e transizioni	
-- Variabili di classe e thread safety
-- Realizzazione di un thread user-level
-- Gestione eccezioni
-- Documentazione del codice in Java
-- Diagramma UML delle classi e dei casi d’uso
+Questo progetto simula una lotteria multithread utilizzando tre classi principali: `Estrazione`, `Giocatore` e `Lotteria`. Ogni giocatore sceglie un numero casuale e verifica se il numero corrisponde a uno dei numeri estratti casualmente da un'istanza della classe `Estrazione`.
 
+Il programma utilizza il concetto di multithreading per simulare l'estrazione simultanea e la partecipazione di più giocatori.
 
-## Osservazioni
-Il progetto è stato scritto per scopi didattici e ha solo lo scopo di far comprendere le proprietà della classe Thread. 
-Ad esso è associato il corrispondente <a href="https://drive.google.com/file/d/1DT6W73QeMnYEYUodcQ1hVpVY1DD0xCNv/view?usp=drive_link">diagramma delle classi</a>.
+## Struttura del Progetto
+
+### Classi Principali
+
+1. **Estrazione**: Rappresenta l'estrazione casuale dei numeri della lotteria. Contiene una matrice di numeri casuali e metodi per visualizzare i numeri estratti e per verificare se un giocatore ha vinto.
+
+   - Costruttore: Inizializza una matrice di numeri casuali.
+   - Metodi principali:
+     - `stampaMatrice()`: Stampa la matrice dei numeri estratti.
+     - `verifica(int numero, int idGiocatore)`: Verifica se il numero scelto da un giocatore è presente nella matrice.
+     - `stampaVincitori()`: Stampa i vincitori dell'estrazione.
+     - `run()`: Esegue il thread associato all'estrazione dei numeri.
+
+2. **Giocatore**: Ogni istanza di questa classe rappresenta un giocatore che sceglie un numero casuale e lo confronta con i numeri estratti dall'oggetto `Estrazione`.
+
+   - Costruttore: Inizializza un giocatore con un ID, un nome e un riferimento all'oggetto `Estrazione`.
+   - Metodi principali:
+     - `run()`: Esegue il thread del giocatore, sceglie un numero casuale e lo verifica con l'estrazione.
+
+3. **Lotteria**: È la classe principale che avvia il gioco, creando il thread dell'estrazione e i thread dei giocatori. Gestisce anche la sincronizzazione dei thread tramite l'uso del metodo `join()`.
+
+   - `main()`: Avvia l'estrazione e la partecipazione di più giocatori alla lotteria.
+
+## Esecuzione del Progetto
+
+Per eseguire il progetto, è necessario un ambiente Java con supporto multithreading. Ecco i passi principali:
+
+1. **Compilare il progetto**: Compila tutte e tre le classi (`Estrazione`, `Giocatore`, `Lotteria`).
+2. **Avvio del gioco**: Esegui la classe `Lotteria` che farà partire l'estrazione e i giocatori.
+3. **Osservare i risultati**: La classe `Lotteria` gestirà l'interazione tra i thread, e i giocatori verranno avvisati se hanno vinto o perso.
+
+### Requisiti
+
+- **Java 8 o superiore**: È necessario per supportare le funzionalità di multithreading.
+- **Ambiente di sviluppo Java**: Consigliato l'uso di IntelliJ IDEA, Eclipse o NetBeans.
+
+## Funzionamento del Programma
+
+- L'oggetto `Estrazione` genera una matrice casuale di numeri (valori compresi tra 0 e 99).
+- Ogni oggetto `Giocatore` sceglie un numero casuale e lo verifica nella matrice.
+- La classe `Lotteria` coordina tutto il flusso del gioco, creando thread per ciascun giocatore e per l'estrazione.
+
+## Esempio di Output
