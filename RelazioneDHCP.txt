@@ -1,0 +1,94 @@
+# Relazione sull’installazione di Ubuntu su una Virtual Machine e configurazione di ISC DHCP Server
+
+---
+
+## 1. Introduzione
+Questa relazione descrive il processo di installazione di Ubuntu su una macchina virtuale e la configurazione del server DHCP utilizzando il pacchetto ISC DHCP Server. L'obiettivo è creare un ambiente virtuale per la gestione automatica degli indirizzi IP nella rete.
+
+---
+
+## 2. Materiali necessari
+- **Software di virtualizzazione**: VirtualBox (o un'alternativa come VMware).
+- **ISO di Ubuntu**: Scaricata dal sito ufficiale di Ubuntu (versione Server o Desktop, a seconda delle necessità).
+- **Connessione a internet**: Necessaria per il download di pacchetti aggiuntivi.
+
+---
+
+## 3. Procedura di installazione
+
+### 3.1 Creazione della macchina virtuale
+1. **Avviare VirtualBox**: Aprire il software di virtualizzazione.
+2. **Creare una nuova macchina virtuale**:
+   - Nome: *Ubuntu_VM*.
+   - Tipo: Linux.
+   - Versione: Ubuntu (64-bit).
+3. **Assegnare le risorse hardware**:
+   - Memoria RAM: Almeno 2 GB (o più, se disponibile).
+   - Spazio su disco: Creare un disco virtuale di almeno 20 GB.
+4. **Collegare l’ISO**:
+   - Selezionare il file ISO di Ubuntu scaricato.
+
+### 3.2 Installazione di Ubuntu
+1. **Avviare la macchina virtuale**: Fare partire la VM e selezionare l'ISO come dispositivo di boot.
+2. **Seguire il processo di installazione**:
+   - Lingua: Italiano.
+   - Configurazione tastiera: Automatica o personalizzata.
+   - Partizionamento: Automatico.
+   - Creare un utente amministratore e impostare una password sicura.
+3. **Completare l'installazione**: Riavviare la VM al termine.
+
+---
+
+## 4. Configurazione del server ISC DHCP
+
+### 4.1 Installazione del pacchetto ISC DHCP Server
+1. **Aggiornare il sistema**:
+   ```bash
+   sudo apt update && sudo apt upgrade
+   ```
+2. **Installare il pacchetto ISC DHCP Server**:
+   ```bash
+   sudo apt install isc-dhcp-server
+   ```
+
+### 4.2 Configurazione del server DHCP
+1. **Modificare il file di configurazione principale**:
+   - Aprire il file `/etc/dhcp/dhcpd.conf` con un editor di testo:
+     ```bash
+     sudo nano /etc/dhcp/dhcpd.conf
+     ```
+   - Configurare un intervallo di indirizzi IP e altri parametri:
+     ```
+     subnet 192.168.1.0 netmask 255.255.255.0 {
+         range 192.168.1.100 192.168.1.200;
+         option routers 192.168.1.1;
+         option domain-name-servers 8.8.8.8, 8.8.4.4;
+         default-lease-time 600;
+         max-lease-time 7200;
+     }
+     ```
+2. **Specificare l’interfaccia di rete**:
+   - Modificare il file `/etc/default/isc-dhcp-server` per specificare l'interfaccia su cui il server DHCP deve operare, ad esempio:
+     ```
+     INTERFACESv4="eth0"
+     ```
+
+### 4.3 Avviare e testare il servizio
+1. **Riavviare il servizio DHCP**:
+   ```bash
+   sudo systemctl restart isc-dhcp-server
+   ```
+2. **Verificare lo stato del servizio**:
+   ```bash
+   sudo systemctl status isc-dhcp-server
+   ```
+3. **Testare il funzionamento**:
+   - Collegare un dispositivo virtuale alla rete e verificare che ottenga un indirizzo IP dal server DHCP.
+
+---
+
+## 5. Conclusioni
+L’installazione di Ubuntu su una macchina virtuale e la configurazione di un server DHCP con ISC DHCP Server è un processo relativamente semplice ma essenziale per chi desidera configurare un laboratorio di rete. Seguendo i passaggi descritti, è possibile creare un ambiente funzionale e gestire efficacemente gli indirizzi IP nella rete.
+
+---
+
